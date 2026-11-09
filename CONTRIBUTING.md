@@ -13,10 +13,12 @@ Github is used to host code, to track issues and feature requests, as well as ac
 
 Pull requests are the best way to propose changes to the codebase.
 
-1. Fork the repo and create your branch from `main`.
+1. Fork the repo and create a focused branch from the target repository's verified
+   published default branch (`master` for this fork). Inspect current remote refs
+   and open PRs first; preserve existing work in other branches and dirty trees.
 2. If you've changed something, update the documentation.
-3. Make sure your code lints (using `scripts/lint`).
-4. Test you contribution.
+3. Run the applicable offline checks below.
+4. Report validation evidence and any checks not run.
 5. Issue that pull request!
 
 ## Any contributions you make will be under the MIT Software License
@@ -42,19 +44,62 @@ Report a bug by [opening a new issue](../../issues/new/choose); it's that easy!
 
 People *love* thorough bug reports. I'm not even kidding.
 
-## Use a Consistent Coding Style
+## Offline checks and formatting
 
-Use [black](https://github.com/ambv/black) to make sure the code follows the style.
+Run from the repository root. The [lint workflow](.github/workflows/lint.yml)
+uses Python 3.12 and Ruff from [requirements.txt](requirements.txt). If setting
+up a development environment is in scope, install that tooling with
+`python3 -m pip install -r requirements.txt`.
 
-## Test your code modification
+With the tooling already installed, these are the nonmutating CI checks:
 
-This custom component is based on [integration_blueprint template](https://github.com/ludeeus/integration_blueprint).
+```sh
+python3 -m ruff check .
+python3 -m ruff format . --check
+```
 
-It comes with development environment in a container, easy to launch
-if you use Visual Studio Code. With this container you will have a stand alone
-Home Assistant instance running and already configured with the included
-[`configuration.yaml`](./config/configuration.yaml)
-file.
+Ruff follows [.ruff.toml](.ruff.toml). [scripts/lint](scripts/lint) is a mutating
+convenience command: it runs `ruff format .` and `ruff check . --fix`. Review its
+diff and keep unrelated formatting or fixes out of the PR.
+
+There is currently no dedicated automated test suite in this checkout. For a
+documentation-only change, check links and required files against the proposed
+Git tree, run `git diff --check`, and review the changed paths. Report unavailable
+tooling explicitly; do not provision or start Home Assistant just to validate docs.
+
+## Model support and validation evidence
+
+Keep changes isolated by device or feature. PRs should identify exact model
+numbers, affected entity platforms, related issues, and the evidence for each
+claimed behavior. Update the [README](README.md) when supported models or behavior
+change. Keep manifest/release changes and unrelated cleanup out of feature PRs
+unless they are explicitly part of the release scope.
+
+Distinguish these evidence levels in PRs and support documentation:
+
+- **Offline:** source inspection, static checks, or fixtures. A model mapping or
+  shared protocol suggests support but does not prove behavior on another model.
+- **Live integration:** discovery, entity creation, state updates, and reported
+  control results observed in an approved Home Assistant/account session.
+- **Physical:** the actual device's response observed for the specific model and
+  feature. A successful API call alone does not establish this.
+
+Label inferred features and untested platforms explicitly. Preserve existing
+model/platform evidence when documenting support; do not generalize a verified
+feature to every model or variant. State what was not tested.
+
+## Approval boundaries
+
+Repository edits and PR publication do not authorize merging, deployment, service
+changes, account access, or device controls. Obtain separate explicit approval
+for the applicable live or physical work and keep private installation details,
+credentials, account/device identifiers, and raw private state out of commits.
+
+[scripts/develop](scripts/develop) may install Home Assistant, initialize local
+configuration, and start an instance. Use it only within an approved runtime
+validation scope; real account login and device controls also need that scope.
+Live or physical acceptance is conditional on that approval, not an automatic
+prerequisite for a documentation PR.
 
 ## License
 

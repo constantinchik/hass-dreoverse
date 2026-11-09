@@ -23,7 +23,7 @@ We welcome you to subscribe to our GitHub repository to stay updated with our la
 
 ## Interested in Contributing?
 
-We welcome enthusiasts and hobbyists who are interested in contributing to the Dreo integration for Home Assistant. Your valuable contributions help improve this project for everyone. For more information on how to contribute, please check [Contributing](contributing.md).
+We welcome enthusiasts and hobbyists who are interested in contributing to the Dreo integration for Home Assistant. Your valuable contributions help improve this project for everyone. For more information on how to contribute, please check [Contributing](CONTRIBUTING.md).
 
 ## Table of Contents
 
